@@ -6,6 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Api from '../api/api';
 
 const useStyles = makeStyles({
   root: {
@@ -67,7 +68,7 @@ export default function StandingTable(props) {
           {props.standings.map(row => (
             <TableRow key={row.id}>
               <TableCell align="left">{row.rank}.</TableCell>
-              <TableCell align="left"><img width={30} src={`http://localhost:8000${row.team.logo}`} /></TableCell>
+              <TableCell align="left"><img width={30} src={`${Api.API_BASE_URL}${row.team.logo}`} /></TableCell>
 
               <TableCell component="th" scope="row">
                 {row.team.name}

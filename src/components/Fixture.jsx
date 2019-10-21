@@ -105,10 +105,10 @@ export default function Fixture(props) {
             <TableRow key={row.id}>
 
               <TableCell>{row.local_team.name} </TableCell>
-              <TableCell><img src={`http://localhost:8000${row.local_team.logo}`} width={25} /> </TableCell>
+              <TableCell><img src={`${Api.API_BASE_URL}${row.local_team.logo}`} width={25} /> </TableCell>
 
               <TableCell align="center">{moment(row.schedule).format('HH:MM DD.MM') }</TableCell>
-              <TableCell><img src={`http://localhost:8000${row.away_team.logo}`} width={25} /> </TableCell>
+              <TableCell><img src={`${Api.API_BASE_URL}${row.away_team.logo}`} width={25} /> </TableCell>
               <TableCell align="center" >{row.away_team.name}</TableCell>
             </TableRow>
           ))}
