@@ -8,6 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import SendIcon from '@material-ui/icons/Send';
 import { MenuItem, Select, Box, TextField, Fab } from '@material-ui/core';
+import { Empty } from 'antd';
 
 
 const useStyles = makeStyles({
@@ -30,35 +31,27 @@ const rows = [
 ];
 
 
-export default function Prediction() {
+export default function Prediction(props) {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
-        name: 'Cat in the Hat',
-        age: '',
-        multiline: 'Controlled',
-        currency: 'EUR',
-    });
-
-    const handleChange = name => event => {
-        setValues({ ...values, [name]: event.target.value });
-    };
+  const [predictions, setPredictions] = React.useState();
     
   return (
     <Box>
+      {props.predictions.length > 0 && 
     <Paper className={classes.root}>
         
       <Table className={classes.table} aria-label="simple table">
         
         <TableBody>
-          {rows.map(row => (
+          {props.predictions.map(row => (
             <Box>
-                <TableRow key={row.name}>
+                <TableRow key={row.id}>
 
-                <TableCell>{row.hometeam} </TableCell>
-                <TableCell><img src={row.homelogo} width={25} /> </TableCell>
+                <TableCell>{row.match.local_team.name} </TableCell>
+                <TableCell><img src={row.match.local_team.logo} width={25} /> </TableCell>
 
-                <TableCell><img src={row.awaylogo} width={25} /> </TableCell>
-                <TableCell align="center" >{row.awayteam}</TableCell>
+                <TableCell><img src={row.match.away_team.logo} width={25} /> </TableCell>
+                <TableCell align="center" >{row.match.away_team.name}</TableCell>
                 </TableRow>
 
                 <TableRow key={row.name}>
@@ -92,11 +85,12 @@ export default function Prediction() {
           ))}
         </TableBody>
       </Table>
-
-    </Paper>
-        <Fab aria-label='Add' color='primary'>
+      
+      <Fab aria-label='Add' color='primary'>
         <SendIcon />
-   </Fab>
+      </Fab>
+    </Paper>
+      || <Empty description='No matches to predict for now. Please check it out later. ' /> }
    </Box>
   );
 }

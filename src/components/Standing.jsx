@@ -3,7 +3,7 @@ import StandingTable from "./StandingTable";
 import React from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Api from "../api/api";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -19,8 +19,11 @@ const useStyles = makeStyles(theme => ({
 export default function Standing(props) {
     const classes = useStyles();
     const [league, setLeague] = React.useState();
+
     const [standings, setStandings] = React.useState([]);
     const [open, setOpen] = React.useState(false);
+    const [retrieving, setRetrieving] = React.useState(false);
+
 
     const handleChange = event => {
         setLeague(event.target.value);
@@ -36,15 +39,16 @@ export default function Standing(props) {
     };
 
     const retrieveStandings = (league) => {
+      setRetrieving(true)
       Api.getData(`standing`, `${league}`)
           .then( response => {
               setStandings(response)
-          })
+              setRetrieving(false)
+          }, err => setRetrieving(false))
 
-  }
+    }
 
-  console.log("STandings")
-    return (
+  return (
         <Box>
              <Select
           open={open}
@@ -60,7 +64,11 @@ export default function Standing(props) {
         {props.leagues.map( league => <MenuItem value={league.id}>{league.name}</MenuItem>)}
         </Select>
           { standings.length > 0 && 
-          <StandingTable standings={standings}/> || <Empty description='Either you havent selected any league or A standing information couldnt retrieved for the selected league. Please try again with different league' />}
+          <StandingTable standings={standings}/> || 
+            <Spin spinning={retrieving}> <Empty 
+              description='Either you havent selected any league or A standing information couldnt retrieved for the selected league. Please try again with different league' />
+            </Spin>
+          }
         </Box>
     )
 }

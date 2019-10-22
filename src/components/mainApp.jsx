@@ -94,7 +94,7 @@ export default function MainApp(props) {
         </TabPanel>
 
         <TabPanel value={value} index={3} dir={theme.direction}>
-            <Prediction />
+            <Prediction predictions = {props.predictions}/>
         </TabPanel>
 
     </div>

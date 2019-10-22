@@ -14,7 +14,8 @@ export default class Home extends React.Component {
             news_count : 0,
             current : 1,
             news_loading : false,
-            leagues : []
+            leagues : [],
+            predictions : []
         }
 
     }
@@ -46,10 +47,20 @@ export default class Home extends React.Component {
 
     }
 
+    retrievePredictions = () => {
+        Api.getData(`predictions`)
+            .then( response => {
+                this.setState({
+                    predictions : response.results
+                })
+            })
+    }
+
 
     componentDidMount() {
         this.retrieveNews(1)
         this.retrieveLeagues()
+        this.retrievePredictions()
     }
 
     render() {

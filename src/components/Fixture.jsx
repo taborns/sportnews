@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 import { MenuItem, Select } from '@material-ui/core';
 import Api from '../api/api';
-import { Empty } from 'antd';
+import { Empty, Spin } from 'antd';
 
 let moment = require('moment')
 
@@ -59,6 +59,7 @@ export default function Fixture(props) {
   const [league, setLeague] = React.useState();
   const [fixtures, setFixtures] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [retrieving, setRetrieving] = React.useState(false);
 
   const handleChange = event => {
       setLeague(event.target.value);
@@ -74,11 +75,12 @@ export default function Fixture(props) {
   };
 
   const retrieveFixtures = (league) => {
+    setRetrieving(true)
     Api.getData(`fixture`, `${league}`)
         .then( response => {
             setFixtures(response)
-        })
-
+            setRetrieving(false)
+        }, err => setRetrieving(false))
   }
 
   return (
@@ -114,7 +116,10 @@ export default function Fixture(props) {
           ))}
         </TableBody>
       </Table>
-      || <Empty description="Either there isnt any matches in this league or You haven't chosen any league yet.  " />}
+      || 
+      <Spin spinning={retrieving}>
+        <Empty description="Either there isnt any matches in this league or You haven't chosen any league yet.  " />
+      </Spin>}
     </div>
   );
 }
